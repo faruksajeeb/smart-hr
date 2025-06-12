@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@headlessui/react';
 import { FormEventHandler } from 'react';
+import { can } from '@/lib/can'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,7 +25,7 @@ export default function PostEdit() {
         title: post.title || "",
         body: post.body || ""
     });
-    
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         put(route('posts.update', post.id));

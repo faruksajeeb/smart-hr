@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link ,usePage, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { can } from '@/lib/can'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

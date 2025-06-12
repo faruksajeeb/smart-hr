@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@headlessui/react';
 import { FormEventHandler } from 'react';
 import { permission } from 'process';
+import { can } from '@/lib/can'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

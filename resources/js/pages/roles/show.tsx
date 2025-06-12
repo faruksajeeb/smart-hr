@@ -5,6 +5,7 @@ import { Head, Link, useForm, usePage } from '@inertiajs/react';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { can } from '@/lib/can'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

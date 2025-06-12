@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link ,usePage, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { can } from '@/lib/can'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -25,12 +26,12 @@ export default function Users() {
             <Head title="users" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div>
-                <Link 
+                {can('users.create') && <Link 
                     href={route('users.create')}
                     className='px-3 py-2 bg-blue-900 text-white rounded-lg '
                 >
                 Create User
-                </Link>
+                </Link>}
 
                 </div>
                 <table className="w-full text-sm ">
@@ -39,36 +40,47 @@ export default function Users() {
                             <th scope='col' className='py-3'>SL NO</th>
                             <th scope='col' className='py-3'>Name</th>
                             <th scope='col' className='py-3'>Email</th>
-                            <th scope='col' className='py-3'>Status</th>
+                            <th scope='col' className='py-3'>Roles</th>
                             <th scope='col' className='py-3'>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            users.map(({id,name,email})=>(
+                            users.map(({id, name, email, roles})=>(
 
-                        <tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-500'>
+                        <tr key={id} className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-500'>
                             <td className='px-6 py-2 '>{id}</td>
                             <td className='px-6 py-2 '>{name}</td>
                             <td className='px-6 py-2 '>{email}</td>
-                            <td className='px-6 py-2 '></td>
+                            <td className='px-6 py-2 '>
+                            {roles.map((role)=> (
+                                <span
+                                key={role}
+                                className='mr-1 rounded p-1 bg-green-200 text-green-90 text-xs font-medium'
+                                >
+                                    {role.name}
+                                </span>
+                                ))}
+                            </td>
                             <td className='px-6 py-2 text-center'>
 
                             <form onSubmit={(e)=>destroyUser(e,id)}>
-                                <Link 
+                                {can('users.view') && <Link 
                                     href={route('users.show',id)} 
                                     className='px-3 py-2 text-xs font-medium bg-gray-600 text-white rounded-lg mx-1'
                                 >
                                     Show
-                                </Link>
+                                </Link>}
+                                {can('users.edit') && 
                                 <Link 
                                 href={route('users.edit',id)} 
                                 className='px-3 py-2 text-xs font-medium bg-amber-600 text-white rounded-lg mx-1'>
                                     Edit
-                                </Link>
+                                </Link>}
+                                {can('users.delete') && 
                                 <button className='px-3 py-2 text-xs font-medium bg-red-700 text-white rounded-lg mx-1'>
                                     Delete
-                                </button>
+                                </button>}
                                 </form>
                             </td>
                         </tr>

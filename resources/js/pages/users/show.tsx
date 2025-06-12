@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@headlessui/react';
 import { FormEventHandler } from 'react';
-
+import { can } from '@/lib/can'
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'User Show',

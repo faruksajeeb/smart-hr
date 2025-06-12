@@ -4,6 +4,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link ,usePage, useForm } from '@inertiajs/react';
 import { permission } from 'process';
 import { FormEventHandler } from 'react';
+import { can } from '@/lib/can'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,12 +27,12 @@ export default function Roles() {
             <Head title="roles" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div>
-                <Link 
+                {can('roles.create') && <Link 
                     href={route('roles.create')}
                     className='px-3 py-2 bg-blue-900 text-white rounded-lg '
                 >
                 Create Role
-                </Link>
+                </Link>}
 
                 </div>
                 <table className="w-full text-sm ">
@@ -65,20 +66,21 @@ export default function Roles() {
                             <td className='px-6 py-2 text-center'>
 
                             <form onSubmit={(e)=>destroyRole(e,id)}>
-                                <Link 
+                            {can('roles.view') && <Link 
                                     href={route('roles.show',id)} 
                                     className='px-3 py-2 text-xs font-medium bg-gray-600 text-white rounded-lg mx-1'
                                 >
                                     Show
-                                </Link>
-                                <Link 
+                                </Link>}
+                                {can('roles.edit') && <Link 
                                 href={route('roles.edit',id)} 
                                 className='px-3 py-2 text-xs font-medium bg-amber-600 text-white rounded-lg mx-1'>
                                     Edit
-                                </Link>
+                                </Link>}
+                                {can('roles.delete') && 
                                 <button className='px-3 py-2 text-xs font-medium bg-red-700 text-white rounded-lg mx-1'>
                                     Delete
-                                </button>
+                                </button>}
                                 </form>
                             </td>
                         </tr>

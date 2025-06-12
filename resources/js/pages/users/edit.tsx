@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@headlessui/react';
 import { FormEventHandler } from 'react';
+import { can } from '@/lib/can'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,13 +19,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function UserEdit() {
-    const { user } = usePage().props;
+    const { user, roles, userRoles } = usePage().props;
 
     const {data,setData, errors, put} = useForm({
         name: user.name || "",
         email: user.email || "",
-        password: user.password || ""
+        password: user.password || "",
+        roles: userRoles || []
     });
+
+    function handleCheckboxCheck(role, checked){
+        if (checked) {
+            setData('roles', [...data.roles, role]);
+        } else {
+            setData('roles', data.roles.filter((p) => p !== role));
+        }
+    }
     
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -88,6 +98,24 @@ export default function UserEdit() {
                         />
 
                         <InputError className="mt-2" message={errors.password} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">Roles</Label>
+                        {roles.map((role) => (
+                            <Label key={role} htmlFor={`permission-${role}`} className='flex items-center space-x-2'>
+                                <input
+                                    type="checkbox"
+                                    className="form-checkbox h-5 w-5"
+                                    value={role}
+                                    id={role}
+                                    checked={data.roles.includes(role)}
+                                    onChange={(e) =>  handleCheckboxCheck(role, e.target.checked)}       
+                                />
+                                <span className='m-2'>{role}</span>
+                            </Label>
+                        ))}
+
+                        <InputError className="mt-2" message={errors.roles} />
                     </div>
                     <Button>Save</Button>
                 </form>
