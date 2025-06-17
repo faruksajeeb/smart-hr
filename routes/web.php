@@ -3,6 +3,7 @@
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\MasterDataController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::resource('posts', PostController::class)->middleware('auth');
 Route::resource('users', UserController::class)->middleware('auth');
 Route::resource('roles', RoleController::class)->middleware('auth');
+Route::resource('master_data', MasterDataController::class)->middleware('auth');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

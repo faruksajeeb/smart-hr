@@ -1,0 +1,111 @@
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, useForm } from '@inertiajs/react';
+
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@headlessui/react';
+import { FormEventHandler } from 'react';
+import { ArrowLeftCircle } from 'lucide-react';
+import { can } from '@/lib/can'
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Master Data Create',
+        href: '/master_data.create',
+    },
+];
+
+export default function MasterDataCreate({types}) {
+    const {data,setData, errors, post} = useForm({
+        type: "",
+        name: "",
+        code: "",
+        parent_id: "",
+        status: "active",
+        description: "",
+    });
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+        post(route('master_data.store'));
+    }
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Master Data Create" />
+            <div className="flex flex-wrap gap-4 p-4 ">
+                <div className="w-full md:w-1/3">
+                <div className='flex justify-start mb-4'>
+                <Link 
+                    href={route('master_data.index')}
+                    className='px-3 py-2 bg-blue-900 text-white rounded-lg flex items-start gap-2'
+                >
+                <ArrowLeftCircle/> Back
+                </Link>
+                </div>
+                <form onSubmit={submit} className="space-y-6">
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            className="mt-1 block w-full"
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
+                            
+                            autoComplete="name"
+                            placeholder="Master Data Name"
+                        />
+                        <InputError className="mt-2" message={errors.name} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="type" id="type-label">Type</Label>
+                        <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                            <option value="">Select Type</option>
+                            {types.map((type) => (
+                                <option key={type} value={type}>
+                                    {type.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                                </option>
+                                ))}
+                        </select>
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="title">Code</Label>
+                        <Input
+                            id="code"
+                            className="mt-1 block w-full"
+                            value={data.code}
+                            onChange={(e) => setData('code', e.target.value)}
+                            
+                            autoComplete="code"
+                            placeholder="Code"
+                        />
+                        <InputError className="mt-2" message={errors.code} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="body">Description</Label>
+
+                        <Textarea
+                        id="body"
+                        className="border-input file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-90 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                        value={data.description}
+                        onChange={(e) => setData('description', e.target.value)}
+                        autoComplete="description"
+                        placeholder="Description"
+                        >
+
+                        </Textarea>
+
+                        <InputError className="mt-2" message={errors.description} />
+                    </div>
+                    <Button>Save</Button>
+                </form>
+            </div>
+            </div>
+        </AppLayout>
+    );
+}
