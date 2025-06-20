@@ -16,11 +16,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+Route::middleware(['auth'])->group(function () {
+    Route::resource('posts', PostController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('master_data', MasterDataController::class);
+});
 
-Route::resource('posts', PostController::class)->middleware('auth');
-Route::resource('users', UserController::class)->middleware('auth');
-Route::resource('roles', RoleController::class)->middleware('auth');
-Route::resource('master_data', MasterDataController::class)->middleware('auth');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

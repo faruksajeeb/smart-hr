@@ -46,7 +46,7 @@ export default function Posts() {
                     </thead>
                     <tbody>
                         {
-                            posts.map(({id,title,body})=>(
+                            posts.map(({id,title,body})=>
 
                         <tr className='odd:bg-white even:bg-gray-50'>
                             <td className='px-6 py-2 '>{id}</td>
@@ -68,8 +68,8 @@ export default function Posts() {
                             </td>
                         </tr>
 
-))
-}
+                        )
+                        }
                     </tbody>
                 </table>
             </div>

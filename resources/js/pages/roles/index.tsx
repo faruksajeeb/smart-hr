@@ -54,35 +54,36 @@ export default function Roles() {
                         <tr key={id} className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-500'>
                             <td className='px-6 py-2 '>{id}</td>
                             <td className='px-6 py-2 '>{name}</td>
-                            <td className='px-6 py-2 '>
+                            <td className='px-6 py-2  break-words whitespace-normal'>
                                 {permissions.map((permission)=> (
                                 <span
                                 key={permission}
-                                className='mr-1 rounded p-1 bg-green-200 text-green-90 text-xs font-medium'
+                                className='inline-block mr-1 mb-1 rounded p-1 bg-green-200 text-green-90 text-xs font-medium'
                                 >
-                                    {permission.name}
+                                    {permission.name
+                                    .replace(/[._]/g, ' ')     
+                                    .replace(/\b\w/g, (c) => c.toUpperCase())} 
                                 </span>
                                 ))}
                             </td>
                             <td className='px-6 py-2 '></td>
-                            <td className='px-6 py-2 text-center'>
-
-                            <form onSubmit={(e)=>destroyRole(e,id)}>
-                            {can('roles.view') && <Link 
-                                    href={route('roles.show',id)} 
-                                    className='px-3 py-2 text-xs font-medium bg-gray-600 text-white rounded-lg mx-1'
-                                >
-                                    Show
-                                </Link>}
-                                {can('roles.edit') && <Link 
-                                href={route('roles.edit',id)} 
-                                className='px-3 py-2 text-xs font-medium bg-amber-600 text-white rounded-lg mx-1'>
-                                    Edit
-                                </Link>}
-                                {can('roles.delete') && 
-                                <button className='px-3 py-2 text-xs font-medium bg-red-700 text-white rounded-lg mx-1'>
-                                    Delete
-                                </button>}
+                            <td className='px-6 py-2 text-center  whitespace-nowrap'>
+                                <form onSubmit={(e)=>destroyRole(e,id)}>
+                                {can('roles.view') && <Link 
+                                        href={route('roles.show',id)} 
+                                        className='px-3 py-2 text-xs font-medium bg-gray-600 text-white rounded me-1'
+                                    >
+                                        Show
+                                    </Link>}
+                                    {can('roles.edit') && <Link 
+                                    href={route('roles.edit',id)} 
+                                    className='px-3 py-2 text-xs font-medium bg-amber-600 text-white rounded me-1'>
+                                        Edit
+                                    </Link>}
+                                    {can('roles.delete') && 
+                                    <button className='px-3 py-2 text-xs font-medium bg-red-700 text-white rounded me-1'>
+                                        Delete
+                                    </button>}
                                 </form>
                             </td>
                         </tr>

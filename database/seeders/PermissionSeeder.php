@@ -23,6 +23,10 @@ class PermissionSeeder extends Seeder
             // "employees.edit",
             // "employees.create",
             // "employees.delete",
+            "master_data.view",
+            "master_data.edit",
+            "master_data.create",
+            "master_data.delete",
         ];
 
         foreach($permissions as $key => $permission):
