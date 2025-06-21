@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreMasterDataRequest;
 use App\Http\Requests\UpdateMasterDataRequest;
 
-use Illuminate\Support\Facades\Gate;
+use App\Exports\MasterDataExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use Inertia\Inertia;
 
@@ -18,6 +19,7 @@ class MasterDataController extends Controller
 {
     public function index(Request $request)
     {
+        //sleep(2); // Delay for 2 seconds
         if (!auth()->user()->can('master_data.view')) {
             abort(403, 'Unauthorized');
         }
@@ -49,18 +51,33 @@ class MasterDataController extends Controller
             $query->where('status', $request->input('status'));
         }
 
+        $sort = $request->get('sortBy', 'id');
+        $direction = $request->get('direction', 'desc');
+
+        $query->orderBy($sort, $direction);
+
         // Paginate with query string
-        $master_data = $query->orderBy('id', 'desc')->paginate(5)->withQueryString();
+        $perPage = $request->get('perPage', 10);
+
+        $master_data = $query->paginate($perPage)->withQueryString();
 
         return Inertia::render('master_data/index', [
             'types' =>  MasterDataType::values(),
             'parents' => MasterData::whereNull('parent_id')->get(),
             'master_data' => $master_data,
-            'filters' => $request->only('search'),
+            'filters' => $request->only('search', 'type','parent', 'status', 'sortBy', 'direction', 'perPage'),
         ]);
     }
 
+    public function export(Request $request)
+    {
+        if (!auth()->user()->can('master_data.export')) {
+            abort(403, 'Unauthorized');
+        }
+        $filters = $request->only(['type', 'status','parent', 'search']);
 
+        return Excel::download(new MasterDataExport($filters), 'master_data.xlsx');
+    }
 
     public function create()
     {
@@ -93,6 +110,9 @@ class MasterDataController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->can('master_data.edit')) {
+            abort(403, 'Unauthorized');
+        }
         $master_data = MasterData::find($id);
 
         return Inertia::render('master_data/edit', [
@@ -113,7 +133,45 @@ class MasterDataController extends Controller
 
     public function destroy(string $id)
     {
+        if (!auth()->user()->can('master_data.delete')) {
+            abort(403, 'Unauthorized');
+        }
         MasterData::destroy($id);
-        return redirect()->route('master_data.index');
+        return redirect()->route('master_data.index')->with('success', 'Master Data deleted successfully.');
     }
+
+    public function toggleStatus($id)
+    {
+        if (!auth()->user()->can('master_data.edit')) {
+            abort(403, 'Unauthorized');
+        }
+        $record = MasterData::findOrFail($id);
+        $record->status = !$record->status;
+        $record->save();
+
+        return back()->with('success', 'Status updated successfully.');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        if (!auth()->user()->can('master_data.delete')) {
+            abort(403, 'Unauthorized');
+        }
+        MasterData::whereIn('id', $request->ids)->delete();
+        return back()->with('success', 'Selected items deleted.');
+    }
+
+    public function bulkToggle(Request $request)
+    {
+        if (!auth()->user()->can('master_data.edit')) {
+            abort(403, 'Unauthorized');
+        }
+        $items = MasterData::whereIn('id', $request->ids)->get();
+        foreach ($items as $item) {
+            $item->status = !$item->status;
+            $item->save();
+        }
+        return back()->with('success', 'Status toggled for selected items.');
+    }
+
 }

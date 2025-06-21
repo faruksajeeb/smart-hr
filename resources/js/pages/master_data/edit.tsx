@@ -143,7 +143,7 @@ console.log(master_data);
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
-                        <Button> <SaveIcon/> Save New</Button>
+                        <Button className='p-2'> <SaveIcon/> Save Changes</Button>
                     </form>
                 </div>
             </div>

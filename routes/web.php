@@ -21,6 +21,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('master_data', MasterDataController::class);
+    Route::get('/master_data_export', [MasterDataController::class, 'export'])->name('master_data.export');
+    Route::put('master_data/{id}/toggle-status', [MasterDataController::class, 'toggleStatus'])
+    ->name('master_data.toggleStatus');
+    Route::post('/master_data/bulk-delete', [MasterDataController::class, 'bulkDelete'])->name('master_data.bulkDelete');
+    Route::post('/master_data/bulk-toggle', [MasterDataController::class, 'bulkToggle'])->name('master_data.bulkToggle');
+
+
 });
 
 

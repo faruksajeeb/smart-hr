@@ -13,7 +13,7 @@ class UpdateMasterDataRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('master_data.create');
+        return $this->user()->can('master_data.edit');
     }
 
     public function rules(): array
