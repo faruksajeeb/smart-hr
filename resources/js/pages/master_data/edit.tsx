@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function MasterDataEdit({master_data, types, parents}) {
-console.log(master_data);
+
     const {data,setData, errors, put} = useForm({
         type: master_data.type || "",
         name: master_data.name ||"",

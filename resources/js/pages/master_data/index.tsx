@@ -189,15 +189,7 @@ export default function MasterData() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-1 gap-4 rounded">
                     
                     <div className="flex flex-col md:flex-row gap-4 flex-grow">
-                        <select
-                        value={perPage}
-                        onChange={(e) => setPerPage(e.target.value)}
-                        className="border border-gray-300 rounded px-3 py-2"
-                        >
-                        {[10, 25, 50, 100].map((value) => (
-                            <option key={value} value={value}>{value}</option>
-                        ))}
-                        </select>
+                        
 
                         {/* Search Input */}
                         <input
@@ -274,21 +266,43 @@ export default function MasterData() {
                         </div>
                     )}
                 </div>
-                <div className="mb-1 flex flex-wrap gap-3 text-sm"> Column Show/ Hide: 
-                {Object.keys(visibleColumns).map((col) => (
-                    <label key={col} className="flex items-center space-x-1">
-                    <input
-                        type="checkbox"
-                        checked={visibleColumns[col]}
-                        onChange={() => setVisibleColumns((prev) => ({
-                        ...prev,
-                        [col]: !prev[col],
-                        }))}
-                    />
-                    <span className="capitalize">{col}</span>
-                    </label>
-                ))}
-                </div>
+                <div className="flex flex-wrap items-center justify-between gap-4 p-3 bg-gray-50 border rounded text-sm">
+  {/* Per Page Dropdown */}
+  <div className="flex items-center gap-2">
+    <label htmlFor="perPage" className="font-medium">Show</label>
+    <select
+      id="perPage"
+      value={perPage}
+      onChange={(e) => setPerPage(e.target.value)}
+      className="border border-gray-300 rounded px-2 py-1"
+    >
+      {[10, 25, 50, 100].map((value) => (
+        <option key={value} value={value}>{value}</option>
+      ))}
+    </select>
+    <span>entries</span>
+  </div>
+
+  {/* Column Visibility Toggles */}
+  <div className="flex flex-wrap items-center gap-3">
+    <span className="font-medium">Columns:</span>
+    {Object.keys(visibleColumns).map((col) => (
+      <label key={col} className="inline-flex items-center gap-1">
+        <input
+          type="checkbox"
+          checked={visibleColumns[col]}
+          onChange={() => setVisibleColumns((prev) => ({
+            ...prev,
+            [col]: !prev[col],
+          }))}
+          className="form-checkbox text-blue-600"
+        />
+        <span className="capitalize">{col}</span>
+      </label>
+    ))}
+  </div>
+</div>
+
 
                 {selected.length > 0 && (
                 <div className="flex gap-2 mb-4">
